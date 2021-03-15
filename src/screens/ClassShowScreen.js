@@ -11,27 +11,30 @@ const ClassShowScreen = ({ navigation }) => {
   // additional useEffects for states of features & subclasses
 
   useEffect(() => {
-    fetch(`https://www.dnd5eapi.co/api/classes/${id}`)
+    fetch(`https://api.open5e.com/classes/${id}`)
       .then((response) => response.json())
       .then((json) => setResult(json))
       .catch((error) => console.error(error))
       .finally(() => setLoading(false));
   }, []);
 
-  useEffect(() => {
-    fetch(`https://www.dnd5eapi.co/api/classes/${id}/features`)
-      .then((response) => response.json())
-      .then((json) => setFeatures(json))
-      .catch((error) => console.error(error))
-      .finally(() => setLoading(false));
-  }, []);
 
-  // features will likely have to be there own component with flatlist
-  if (features.results) {
-    var feat = features.results.map(value => value.name)
-    feat = feat.join(', ')
-  }
-
+  // useEffect(() => {
+  //   fetch(`https://www.dnd5eapi.co/api/classes/${id}/features`)
+  //     .then((response) => response.json())
+  //     .then((json) => setFeatures(json))
+  //     .catch((error) => console.error(error))
+  //     .finally(() => setLoading(false));
+  // }, []);
+  //
+  // // features will likely have to be there own component with flatlist
+  // if (features.results) {
+  //   var feat = features.results.map(value => value.name)
+  //   feat = feat.join(', ')
+  // }
+  var desc = "";
+  (typeof result.desc) == "string" ? desc = result.desc.replace(/# /g, "") : null;
+  (typeof result.desc) == "string" ? desc = desc.replace(/#/g, "") : null;
 
   return (
     <ScrollView>
@@ -50,23 +53,41 @@ const ClassShowScreen = ({ navigation }) => {
       {result.name == 'Wizard' && <Image style={styles.image} source={require('../../assets/class-pics/wizard.png')} />}
       <View style={styles.data}>
         <Text>HIT POINTS</Text>
-        {result.hit_die && <Text>Hit Dice: 1d{result.hit_die} per {result.name} level</Text>}
-        {result.hit_die && <Text>Hit Points at 1st Level: {result.hit_die} + Constitution modifier</Text>}
-        {result.hit_die && <Text>Hit Points at Higher Levels: 1d{result.hit_die} (or {result.hit_die / 2 + 1}) + Constituion modifier</Text>}
+        <Text>Armor: {result.prof_armor}</Text>
+        <Text>Weapons: {result.prof_weapons}</Text>
+        <Text>Tools: {result.prof_tools}</Text>
+        <Text>Saving Throws: {result.prof_saving_throws}</Text>
+        <Text>Skills: {result.prof_skills}</Text>
       </View>
       <View style={styles.data}>
-        <Text>STARTING PROFICIENCIES</Text>
-        {result.proficiencies && <Text>{result.hit_die}</Text>}
+        <Text>PROFICIENCIES</Text>
+        <Text>Armor: {result.prof_armor}</Text>
+        <Text>Weapons: {result.prof_weapons}</Text>
+        <Text>Tools: {result.prof_tools}</Text>
+        <Text>Saving Throws: {result.prof_saving_throws}</Text>
+        <Text>Skills: {result.prof_skills}</Text>
       </View>
       <View style={styles.data}>
-        <Text>FEATURES</Text>
-        {features && <Text>{feat}</Text>}
+        <Text>STARTING EQUIPMENT</Text>
+        <Text>{result.equipment}</Text>
+      </View>
+      <View style={styles.data}>
+        <Text>CLASS ABILITIES</Text>
+        <Text>{desc}</Text>
       </View>
     </ScrollView>
   );
 };
 
 
+// <View style={styles.data}>
+//   <Text>HIT POINTS</Text>
+//   <Text>Armor: {result.prof_armor}</Text>
+//   <Text>Weapons: {result.prof_weapons}</Text>
+//   <Text>Tools: {result.prof_tools}</Text>
+//   <Text>Saving Throws: {result.prof_saving_throws}</Text>
+//   <Text>Skills: {result.prof_skills}</Text>
+// </View>
 // <View style={styles.data}>
 //   <Text>PROFICIENCIES</Text>
 //   <Text>Armor: {result.prof_armor}</Text>
@@ -86,6 +107,22 @@ const ClassShowScreen = ({ navigation }) => {
 // <Text numberOfLines={1} ellipsizeMode='tail'>
 //   Lorem Ipsum is simply dummy text of the printing and typesetting industry.
 // </Text>
+
+// <View style={styles.data}>
+//   <Text>HIT POINTS</Text>
+//   {result.hit_die && <Text>Hit Dice: 1d{result.hit_die} per {result.name} level</Text>}
+//   {result.hit_die && <Text>Hit Points at 1st Level: {result.hit_die} + Constitution modifier</Text>}
+//   {result.hit_die && <Text>Hit Points at Higher Levels: 1d{result.hit_die} (or {result.hit_die / 2 + 1}) + Constituion modifier</Text>}
+// </View>
+// <View style={styles.data}>
+//   <Text>STARTING PROFICIENCIES</Text>
+//   {result.proficiencies && <Text>{result.hit_die}</Text>}
+// </View>
+// <View style={styles.data}>
+//   <Text>FEATURES</Text>
+//   {features && <Text>{feat}</Text>}
+// </View>
+
 
 
 const styles = StyleSheet.create({

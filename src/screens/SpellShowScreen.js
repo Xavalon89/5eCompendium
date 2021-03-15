@@ -43,8 +43,8 @@ const SpellShowScreen = ({ navigation }) => {
   return (
     <ScrollView style={styles.view} nestedScrollEnabled={true}>
       <Text style={styles.class}>{result.name}</Text>
-      {result.school && section == 'Cantrip' && <Text style={styles.type}>{result.school.name} {section}</Text>}
-      {result.school && section != 'Cantrip' && <Text style={styles.type}>{section} {result.school.name} {ritual}</Text>}
+      {result.school && section == 'Cantrips' && <Text style={styles.type}>{result.school.name} cantrip</Text>}
+      {result.school && section != 'Cantrips' && <Text style={styles.type}>{section} {result.school.name} {ritual}</Text>}
       {result.casting_time && <Text style={styles.data}>Casting Time: {result.casting_time}</Text>}
       {result.range && <Text style={styles.data}>Range: {result.range}</Text>}
       {result.components && <Text style={styles.data}>Components: {result.components.join(' ')} {material}</Text>}

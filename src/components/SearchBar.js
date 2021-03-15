@@ -6,8 +6,9 @@
 import React from 'react';
 import { View, TextInput, StyleSheet } from 'react-native';
 import { Feather } from '@expo/vector-icons'
+import SpellsList from '../components/SpellsList';
 
-const SearchBar = ({ term, onTermChange }) => {
+const SearchBar = ({ term, onTermChange, onTermSubmit }) => {
   return (
     <View style={styles.backgroundStyle}>
       <Feather name="search" style={styles.iconStyle} />
@@ -18,6 +19,7 @@ const SearchBar = ({ term, onTermChange }) => {
         placeholder="Search"
         value={term}
         onChangeText={onTermChange}
+        onEndEditing={onTermSubmit}
       />
     </View>
   );
@@ -25,13 +27,15 @@ const SearchBar = ({ term, onTermChange }) => {
 
 const styles = StyleSheet.create({
   backgroundStyle: {
-    marginTop: 10,
+    marginTop: 5,
     backgroundColor: 'rgb(230,230,230)',
     height: 50,
-    borderRadius: 5,
-    marginHorizontal: 10,
+    borderRadius: 10,
+    marginHorizontal: 5,
     flexDirection: 'row',
-    marginBottom: 10
+    marginBottom: 5,
+    // borderWidth: 2,
+    borderColor: 'black' //#fcba03
   },
   inputStyle: {
     flex: 1,

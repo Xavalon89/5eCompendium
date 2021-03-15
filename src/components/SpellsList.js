@@ -1,40 +1,35 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, TouchableOpacity, FlatList, SectionList } from 'react-native';
 import { withNavigation } from 'react-navigation';
+import SearchBar from '../components/SearchBar';
+import useSpells from '../hooks/useSpells';
 
 
-// this no longer has memo (look at monster or equip to restore(bottom and top))
-const SpellsList = React.memo(function SpellsList({ level, navigation, footer, term }) {
-  const [isLoading, setLoading] = useState(true);
-  const [data, setData] = useState([]);
 
-  let stillMounted = { value: false }
-  useEffect(() => {
-    stillMounted.value = true
-    return () => (stillMounted.value = false)
-  }, [])
+// switch back from spells to level in props if broke
+const SpellsList = React.memo(function SpellsList({ spells, navigation, footer, level, searchy }) {
+  const [searchApi, errorMessage] = useSpells();
+  const [term, setTerm] = useState('');
+  // const [isLoading, setLoading] = useState(true);
+  // const [data, setData] = useState([]);
+  // const [newTerm, setNewTerm] = useState(term);
 
-  if (!stillMounted.value) {
-    useEffect(() => {
-      fetch(`https://www.dnd5eapi.co/api/spells/?level=${level}&&name=${term}`)
-        .then((response) => response.json())
-        .then((json) => setData(json))
-        .catch((error) => console.error(error))
-        .finally(() => setLoading(false));
-    }, []);
-  }
+  // useEffect(() => {
+  //   fetch(`https://www.dnd5eapi.co/api/spells/?level=${level}&&name=${newTerm}`)
+  //     .then((response) => response.json())
+  //     .then((json) => setData(json))
+  //     .catch((error) => console.error(error))
+  //     .finally(() => setLoading(false));
+  // }, []);
 
-
-  console.log(stillMounted.value)
 
   // spells/?level=0&&name=Acid+Splash this here works
-  // if I can get this to work, use function to replace ' ' in string with '+'
 
 
   var section = '';
   switch (level) {
     case 0:
-      section = 'Cantrip';
+      section = 'Cantrips';
       break;
     case 1:
       section = '1st Level';
@@ -49,22 +44,22 @@ const SpellsList = React.memo(function SpellsList({ level, navigation, footer, t
       section = `${level}th Level`;
   }
 
-
-  // add searchbar to header?
-  const Header = () => {
+  const renderHeader = () => {
     return (
       <>
+        {searchy}
         <Text style={styles.level}>{section}</Text>
       </>
     )
   }
 
   return (
-    <View>
+    <>
       <FlatList
-        ListHeaderComponent={Header}
+        removeClippedSubviews={false}
+        ListHeaderComponent={renderHeader()}
         ListFooterComponent={footer}
-        data={data.results}
+        data={spells.results}
         keyExtractor={(item, index) => item.index}
         renderItem={({ item }) => {
           return (
@@ -74,7 +69,7 @@ const SpellsList = React.memo(function SpellsList({ level, navigation, footer, t
           );
         }}
       />
-    </View>
+    </>
   )
 });
 
